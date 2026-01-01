@@ -1,29 +1,29 @@
-# Project JANUS (Private Intelligence Center)
+# Project JANUS (雅努斯)
 
-> **Build your own digital brain - Private, Agentic, and Self-Evolving.**
+> **构建属于你的数字大脑 —— 私有、代理化、且具有自我演进能力。**
 
-Project JANUS is an independent, modular AI framework designed to orchestrate multiple specialized agents (Skills) and connect them to local resources via the Model Context Protocol (MCP).
+Project JANUS 是一个独立的模块化 AI 框架，旨在协调多个专业智能体（Skills），并通过模型上下文协议（MCP）连接本地资源。
 
-## 🌟 Core Philosophy: "The JANUS Way"
-- **Logic & Execution Separation**: Brains stay in the cloud (or strong local LLM), hands stay on local hardware.
-- **Audit-First**: Never trust, always verify. Every piece of AI-generated code is audited before execution.
-- **Evolutionary Pruning**: The system automatically suggests and tests improvements, keeping the performance ceiling high.
+## 🌟 核心哲学 (Philosophy)
+- **逻辑与执行分离 (Logic & Execution Separation)**：智能大脑在云端（或强力本地 LLM），执行手脚留在本地硬件。
+- **审计先行 (Audit-First)**：永不信任，始终验证。所有 AI 生成的代码在运行前必须经过异构模型审计。
+- **进取式修剪 (Evolutionary Pruning)**：系统自动建议并测试改进方案，通过显式“减法”逻辑保持系统的高性能天花板。
 
-## 🚀 Getting Started
-1. **Initialize Environment**:
+## 🚀 快速开始
+1. **环境初始化**：
    ```bash
    cp .env.example .env
-   # Fill in your API keys or local LLM endpoints
+   # 填入你的 API Key 或本地 LLM 终端地址
    ```
-2. **Onboard your AI**: If you are using an AI assistant to develop this, point it to `BOOTSTRAP.md` immediately.
-3. **Run Hub**: (Coming Soon in Phase 1)
+2. **AI 开发引导**：如果你正使用 AI 助手开发本项目，请立即引导其阅读 `BOOTSTRAP.md`。
+3. **运行 Hub**：(Phase 1 开发中)
 
-## 📡 Collaboration Strategy
-To prevent context window bloat and maintain high reasoning quality, we use a **Master/Specialist Session** model:
-- **Master Session**: (The Architect) High-level design, security policy, and cross-skill auditing.
-- **Specialist Sessions**: (The Developers) Dedicated chats for building single MCP servers or Skills.
+## 📡 协作策略 (Collaboration)
+为防止上下文窗口膨胀并保持高推理质量，我们采用 **“主/支线会话模型”**：
+- **主会话 (Master Session)**：充当“架构师”，负责高层设计、安全策略和跨技能审计。
+- **专项会话 (Specialist Sessions)**：充当“开发员”，专注于构建单一 MCP 服务或 Skill。
 
-*Detailed guide available at [`.agent/collaboration.md`](./.agent/collaboration.md)*
+*详细指南请参阅 [`.agent/collaboration.md`](./.agent/collaboration.md)*
 
 ---
-*Created by Harold & Antigravity (2026-01-01)*
+*Created by Harold Yao & Antigravity (2026-01-02)*
