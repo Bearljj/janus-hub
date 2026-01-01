@@ -1,10 +1,10 @@
-# PIC Hub (Private Intelligence Center)
+# Project JANUS (Private Intelligence Center)
 
 > **Build your own digital brain - Private, Agentic, and Self-Evolving.**
 
-PIC Hub is an independent, modular AI framework designed to orchestrate multiple specialized agents (Skills) and connect them to local resources via the Model Context Protocol (MCP).
+Project JANUS is an independent, modular AI framework designed to orchestrate multiple specialized agents (Skills) and connect them to local resources via the Model Context Protocol (MCP).
 
-## 🌟 Core Philosophy: "The PIC Way"
+## 🌟 Core Philosophy: "The JANUS Way"
 - **Logic & Execution Separation**: Brains stay in the cloud (or strong local LLM), hands stay on local hardware.
 - **Audit-First**: Never trust, always verify. Every piece of AI-generated code is audited before execution.
 - **Evolutionary Pruning**: The system automatically suggests and tests improvements, keeping the performance ceiling high.

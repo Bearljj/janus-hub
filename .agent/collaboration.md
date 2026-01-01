@@ -1,6 +1,6 @@
 # AI Collaboration & Evolution Strategy
 
-This document defines how the User and AI Agents cooperate within the PIC Hub ecosystem to overcome context window limitations and maintain system integrity.
+This document defines how the User and AI Agents cooperate within the Project JANUS ecosystem to overcome context window limitations and maintain system integrity.
 
 ## 1. The Source of Truth
 **The File System is the only Truth.**

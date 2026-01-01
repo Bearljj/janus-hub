@@ -1,7 +1,7 @@
-# PIC Hub Architecture Blueprint v0.1
+# Project JANUS Architecture Blueprint v0.1
 
 ## 1. Overview
-PIC Hub is a modular AI system framework. It prioritizes data privacy, scalability, and AI-to-AI (A2A) collaboration.
+Project JANUS is a modular AI system framework. It prioritizes data privacy, scalability, and AI-to-AI (A2A) collaboration.
 
 ## 2. Layers
 ### A. Orchestration Layer (The Hub Core)

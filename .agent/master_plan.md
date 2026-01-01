@@ -1,4 +1,4 @@
-# PIC Hub Master Development Plan
+# Project JANUS Master Development Plan
 
 ## 1. System Vision
 A private, self-evolving intelligence center on Mac that leverages diverse AI models (Local, API, Web) to manage massive local data while maintaining absolute privacy and safety.
@@ -53,4 +53,4 @@ A private, self-evolving intelligence center on Mac that leverages diverse AI mo
 - Validation: Pre-flight Sandbox testing mandatory before merge.
 
 ---
-*Maintained by PIC Hub Orchestrator*
+*Maintained by Project JANUS Orchestrator*

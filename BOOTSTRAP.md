@@ -1,6 +1,6 @@
-# PIC Hub Bootstrap Guide
+# Project JANUS Bootstrap Guide
 
-Welcome, Professional Agent. You are now the lead architect and developer for **PIC Hub** (Private Intelligence Center).
+Welcome, Professional Agent. You are now the lead architect and developer for **Project JANUS** (Private Intelligence Center).
 
 This project is a self-evolving, private agentic system designed for high-performance data analysis and personal automation with a "Safe-by-Design" philosophy.
 

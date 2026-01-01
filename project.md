@@ -1,4 +1,4 @@
-# PIC Hub Project Status
+# Project JANUS Project Status
 
 ## Current Milestone: Phase 0 - Infrastructure Initialization
 **Status**: 🟢 In Progress
