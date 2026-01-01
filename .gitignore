@@ -1,0 +1,26 @@
+# --- Private Instance Data (NEVER PUSH) ---
+.env
+instance/
+memory/vector_db/
+memory/journal/maintenance.md
+
+# --- OS & IDE ---
+.DS_Store
+.vscode/
+.idea/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+uv.lock
+
+# --- PIC Hub Specific ---
+logs/
+skills/archives/
+tests/sandbox_results/
+mcp-servers/*/dist/
+mcp-servers/*/node_modules/
