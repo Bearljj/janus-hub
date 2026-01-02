@@ -42,9 +42,18 @@
   - 在核心技术术语、协议、状态名后必须保留 **英文锚点**（例如：审计中间件 `AuditMiddleware`）。
 - **系统交互中文优先 (Chinese-First UI)**：
   - 所有面向用户的系统提示 (System Prompts)、控制台日志 (Console Logs) 以及 UI 文本必须首选 **中文**，以确保与主人的直观对齐。
-- **抗熵增结构 (Anti-Entropy Structure)**：
-  - 禁止单纯在文档末尾追加内容。新信息必须**集成 (Integrate)** 进既有的逻辑章节中。
-  - 术语使用必须参考 `.agent/blueprint.md` 中的 **Terminology Mapping**。
+## 5. 核心卫戍协议 (Sanctuary Protection Protocol)
+
+为了确保 JANUS 的安全基石不被恶意或无意修改，以下文件被定义为 **“卫戍文件 (Sanctuary Files)”**：
+- `/core/audit.py` (审计逻辑)
+- `/core/dispatcher.py` (调度中枢)
+- `.agent/blueprint.md` (架构蓝图)
+
+### 变更约束：
+1. **禁止静默修改**：AI 不得在一次大的任务中顺带修改上述文件。任何改动必须是**独立且明确告知**的任务。
+2. **强制风险告知**：在修改卫戍文件前，AI 必须向主人解释该修改对安全边界的潜在影响。
+3. **审计记录**：所有涉及安全内核的修改，其 Git Commit 消息必须包含 `[SECURITY-CORE]` 标签，且必须在 `PROJECT.md` 的更新日志中显著单列。
+4. **自检机制**：系统核心应具备自检能力，在启动时识别并报告卫戍文件的变动。
 - **可机器读取 (Machine Readable)**：
   - 核心配置项、Schema 定义和流程逻辑应使用列表、表格或伪代码等结构化形式呈现。
 

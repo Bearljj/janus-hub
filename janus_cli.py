@@ -6,10 +6,11 @@ from typing import List
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from core.schema import AgentSkill, Intent, Message, TaskStatus
+from core.schema import AgentSkill, Intent, Message, TaskStatus, AuditStatus
 from core.provider import BaseProvider
 from core.dispatcher import Dispatcher
 from core.executor import MCPExecutor
+from core.audit import RuleBasedAuditor
 
 class AssistantGuidedProvider(BaseProvider):
     """
@@ -64,7 +65,8 @@ async def start_janus():
     
     # 1. Setup Kernel
     provider = AssistantGuidedProvider()
-    dispatcher = Dispatcher(provider=provider)
+    auditor = RuleBasedAuditor()
+    dispatcher = Dispatcher(provider=provider, auditor=auditor)
 
     # 2. Setup Executors
     server_script = os.path.abspath("mcp-servers/local_file_server.py")
@@ -90,12 +92,30 @@ async def start_janus():
                 
             context = await dispatcher.handle_query(user_input)
             
-            # Print Final Assistant Response
+            # --- 人机协同环节 (Human-in-the-loop) ---
+            if context.status == TaskStatus.AUDITING:
+                confirm = input("\n[注意] 检测到安全警告。是否允许继续执行？(y/n/查看理由): ").lower()
+                if confirm == 'y':
+                    context = await dispatcher.execute_task(context)
+                elif '理由' in confirm or 'reason' in confirm:
+                    # 获取审计报告理由 (Extract reason from metadata)
+                    for msg in context.messages:
+                        if "metadata" in msg.__dict__ and "audit_report" in msg.metadata:
+                            print(f"\n[审计详情]: {msg.metadata['audit_report']['rationale']}")
+                    confirm_again = input("\n读完理由后，是否允许继续执行？(y/n): ").lower()
+                    if confirm_again == 'y':
+                        context = await dispatcher.execute_task(context)
+                    else:
+                        print("[系统] 任务已被用户取消。")
+                else:
+                    print("[系统] 任务已被用户取消。")
+
+            # --- 结果展示 (Final Result Display) ---
             for msg in context.messages:
                 if msg.role == "assistant":
                     print(f"\n[Janus]:\n{msg.content}")
                 elif msg.role == "system":
-                    print(f"\n[系统错误]: {msg.content}")
+                    print(f"\n[通知]: {msg.content}")
                     
         except KeyboardInterrupt:
             break

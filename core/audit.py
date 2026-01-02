@@ -1,0 +1,48 @@
+from abc import ABC, abstractmethod
+from typing import Any, Dict
+from .schema import AuditResult, AuditStatus, TaskContext
+
+class BaseAuditor(ABC):
+    """
+    Abstract base class for Security Auditing (安全审计抽象基类)
+    """
+
+    @abstractmethod
+    async def audit(self, skill_id: str, parameters: Dict[str, Any], context: TaskContext) -> AuditResult:
+        """
+        Audit a specific action before execution (执行前审计)
+        """
+        pass
+
+class RuleBasedAuditor(BaseAuditor):
+    """
+    基于规则的审计器：检测高危操作和毁灭性意图。
+    """
+    async def audit(self, skill_id: str, parameters: Dict[str, Any], context: TaskContext) -> AuditResult:
+        # 获取最新的用户原始输入 (Get the raw user query from context)
+        raw_query = context.messages[0].content.lower()
+        params_str = str(parameters).lower()
+        
+        # 1. 绝对毁灭性操作拦截 (Hard Reject)
+        # 如果原始意图包含 "delete all"，即使被映射到了 "list_files"，也要拦截
+        destructive_keywords = ["rm ", "delete all", "sudo ", "format "]
+        if any(k in raw_query for k in destructive_keywords) or "delete" in params_str:
+             return AuditResult(
+                status=AuditStatus.FAIL,
+                rationale=f"检测到潜在的毁灭性指令或参数。已根据 '宁慢必审' 原则自动拦截。",
+                risk_level=10
+            )
+
+        # 2. 敏感操作警告 (Soft Warning - Needs Human Confirmation)
+        if "files" in raw_query and ("all" in raw_query or "*" in params_str):
+            return AuditResult(
+                status=AuditStatus.WARN,
+                rationale="你正试图进行批量操作（如列出所有文件），这在高负载或特定隐私环境下可能存在风险。",
+                risk_level=5
+            )
+            
+        return AuditResult(
+            status=AuditStatus.PASS,
+            rationale="常规操作，安全扫描通过。",
+            risk_level=1
+        )

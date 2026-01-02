@@ -23,8 +23,26 @@ class TaskStatus(str, Enum):
     RUNNING = "running"
     COMPLETED = "completed"
     FAILED = "failed"
+    REJECTED = "rejected" # 审计拒绝
+
+class AuditStatus(str, Enum):
+    """
+    Status of a security audit (安全审计状态)
+    """
+    PASS = "pass"
+    WARN = "warn"
+    FAIL = "fail"
 
 # --- Core Models (核心模型) ---
+
+class AuditResult(BaseModel):
+    """
+    Detailed report of a security audit (安全审计报告)
+    """
+    status: AuditStatus
+    rationale: str = Field(..., description="审计理由")
+    suggested_changes: Optional[str] = None
+    risk_level: int = Field(0, ge=0, le=10) # 0-10 风险等级
 
 class AgentSkill(BaseModel):
     """
@@ -67,3 +85,4 @@ class TaskContext(BaseModel):
     messages: List[Message] = Field(default_factory=list)
     status: TaskStatus = TaskStatus.PENDING
     artifacts: List[str] = Field(default_factory=list, description="Paths to generated files/data")
+    metadata: Dict[str, Any] = Field(default_factory=dict)
