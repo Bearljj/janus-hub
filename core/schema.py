@@ -24,6 +24,7 @@ class TaskStatus(str, Enum):
     COMPLETED = "completed"
     FAILED = "failed"
     REJECTED = "rejected" # 审计拒绝
+    WAITING = "waiting"   # 等待大脑协同 (SOS)
 
 class AuditStatus(str, Enum):
     """

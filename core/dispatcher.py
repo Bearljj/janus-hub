@@ -1,10 +1,11 @@
 import uuid
+import json
 from typing import Dict, List, Optional
 from .schema import AgentSkill, Intent, TaskContext, Message, MessageRole, TaskStatus
 from .provider import BaseProvider
 from .executor import BaseExecutor
 from .audit import BaseAuditor, AuditStatus
-from .memory import MirrorMemory
+from .memory import MirrorMemory, KnowledgeStore
 
 class Dispatcher:
     """
@@ -12,10 +13,11 @@ class Dispatcher:
     Responsible for Skill registration, Intent Resolution, and Task Routing.
     """
 
-    def __init__(self, provider: BaseProvider, auditor: BaseAuditor, memory: MirrorMemory = None):
+    def __init__(self, provider: BaseProvider, auditor: BaseAuditor, memory: MirrorMemory = None, knowledge: KnowledgeStore = None):
         self.provider = provider
         self.auditor = auditor
         self.memory = memory or MirrorMemory()
+        self.knowledge = knowledge or KnowledgeStore()
         self.skills: Dict[str, AgentSkill] = {}
         self.skill_executors: Dict[str, BaseExecutor] = {}
         self.active_tasks: Dict[str, TaskContext] = {}
@@ -86,8 +88,52 @@ class Dispatcher:
         skill_id = intent_data["target_skill_id"]
         parameters = intent_data["parameters"]
         
+        # --- 内置记忆技能处理 (Built-in Memory Skills) ---
+        if skill_id == "list_memory":
+            result = self.memory.list_logs()
+            context.messages.append(Message(role=MessageRole.ASSISTANT, content=f"发现以下记忆文件:\n" + "\n".join(result)))
+            context.status = TaskStatus.COMPLETED
+            self.memory.log_task(context)
+            return context
+        
+        if skill_id == "read_memory":
+            filename = parameters.get("filename")
+            if not filename:
+                result = "请提供文件名。"
+            else:
+                result = self.memory.read_log(filename)
+            context.messages.append(Message(role=MessageRole.ASSISTANT, content=result))
+            context.status = TaskStatus.COMPLETED
+            self.memory.log_task(context)
+            return context
+
+        if skill_id == "query_knowledge":
+            keyword = parameters.get("keyword", "")
+            results = self.knowledge.query_facts(keyword)
+            context.messages.append(Message(role=MessageRole.ASSISTANT, content=f"知识库查询结果:\n" + json.dumps(results, ensure_ascii=False, indent=2)))
+            context.status = TaskStatus.COMPLETED
+            self.memory.log_task(context)
+            return context
+
+        if skill_id == "add_knowledge":
+            category = parameters.get("category", "General")
+            content = parameters.get("content")
+            if not content:
+                result = "未提供内容。"
+            else:
+                self.knowledge.add_fact(category, content, context.task_id)
+                result = f"已记录事实: [{category}] {content}"
+            context.messages.append(Message(role=MessageRole.ASSISTANT, content=result))
+            context.status = TaskStatus.COMPLETED
+            self.memory.log_task(context)
+            return context
+
         context.status = TaskStatus.RUNNING
-        executor = self.skill_executors[skill_id]
+        executor = self.skill_executors.get(skill_id)
+        if not executor:
+            context.status = TaskStatus.FAILED
+            context.messages.append(Message(role=MessageRole.SYSTEM, content=f"未找到执行器: {skill_id}"))
+            return context
         
         try:
             result = await executor.execute(

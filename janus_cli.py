@@ -59,6 +59,32 @@ class AssistantGuidedProvider(BaseProvider):
             target = "data_summary_stats"
             params = {"relative_path": "data/processed/insurance_data_cleaned.parquet"}
             thought = "User wants a statistical overview of the dataset."
+        elif "memory" in q or "记忆" in q or "回顾" in q:
+            target = "list_memory"
+            thought = "User wants to see session history."
+        elif "read log" in q or "读日志" in q:
+            target = "read_memory"
+            params = {"filename": "session_latest.md"} # 真实 AI 会提取具体文件名
+            thought = "User wants to read a specific log."
+        elif "knowledge" in q or "事实" in q or "知识" in q:
+            target = "query_knowledge"
+            params = {"keyword": ""}
+            thought = "User wants to query the structured knowledge store."
+        elif "remember" in q or "记住" in q:
+            target = "add_knowledge"
+            params = {"category": "UserPreference", "content": "Owner likes transposed views."}
+            thought = "User wants to manually record a fact."
+
+        else:
+            # --- 触发 SOS 信号 (Trigger SOS Signal) ---
+            print(f"\n[SOS] JANUS 无法理解意图: '{query}'")
+            return Intent(
+                raw_query=query,
+                thought_process="Mock logic failed. Emitting SOS to Antigravity.",
+                target_skill_id=None,
+                parameters={},
+                confidence=0.0
+            )
 
         return Intent(
             raw_query=query,
@@ -102,6 +128,10 @@ async def start_janus():
         AgentSkill(id="search_in_file", name="Search Content", description="Search text in a file."),
         AgentSkill(id="preview_data_schema", name="Preview Data", description="Preview CSV/Parquet schema."),
         AgentSkill(id="data_summary_stats", name="Data Stats", description="Get statistical summary of a data file."),
+        AgentSkill(id="list_memory", name="List Memory", description="List all interaction logs."),
+        AgentSkill(id="read_memory", name="Read Memory", description="Read a specific log file."),
+        AgentSkill(id="query_knowledge", name="Query Knowledge", description="Query factual information."),
+        AgentSkill(id="add_knowledge", name="Add Knowledge", description="Manually record a fact."),
     ]
     for s in skills:
         dispatcher.register_skill(s, mcp_executor)
@@ -116,6 +146,13 @@ async def start_janus():
                 break
                 
             context = await dispatcher.handle_query(user_input)
+            
+            # --- SOS 协同环节 ---
+            if context.status == TaskStatus.PENDING and not context.metadata.get("intent", {}).get("target_skill_id"):
+                 print(f"\n🚨 [系统信号] JANUS 陷入逻辑困境。")
+                 print(f"信号已发送至 Antigravity (大脑中心)。请等待逻辑补全...")
+                 context.status = TaskStatus.WAITING
+                 # 实际上，这会触发我这边的响应，逻辑在此时挂起
             
             # --- 人机协同环节 (Human-in-the-loop) ---
             if context.status == TaskStatus.AUDITING:

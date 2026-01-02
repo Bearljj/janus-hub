@@ -107,17 +107,38 @@ async def data_summary_stats(relative_path: str) -> str:
         else:
             df = pd.read_csv(full_path)
             
-        # 1. Basic Info (Types and Nulls)
+        # 1. 基础信息汇总 (Basic Info)
         buffer = io.StringIO()
         df.info(buf=buffer)
         info_str = buffer.getvalue()
         
-        # 2. Descriptive Stats
-        stats_md = df.describe(include='all').to_markdown()
+        # 2. 数值型特征统计 (Numeric Stats - Transposed)
+        num_df = df.select_dtypes(include=['number'])
+        num_stats_md = ""
+        if not num_df.empty:
+            num_stats_md = num_df.describe().T.to_markdown()
+        else:
+            num_stats_md = "*未检测到数值型字段*"
+
+        # 3. 分类/非数值型特征统计 (Categorical Stats - Transposed)
+        cat_df = df.select_dtypes(exclude=['number'])
+        cat_stats_md = ""
+        if not cat_df.empty:
+            # 对于非数值型，describe 默认包含 unique, top, freq
+            cat_stats_md = cat_df.describe().T.to_markdown()
+        else:
+            cat_stats_md = "*未检测到非数值型字段*"
         
-        return f"### 数据概要 (Info):\n{info_str}\n\n### 描述性统计 (Statistics):\n{stats_md}"
+        return (
+            f"### 1. 数据引擎概览 (Data Engine Info)\n"
+            f"```text\n{info_str}\n```\n\n"
+            f"### 2. 数值型指标统计 (Numeric Metrics - Transposed)\n"
+            f"针对保费、保额、赔款等定量字段的分布分析：\n\n{num_stats_md}\n\n"
+            f"### 3. 分类/标签特征统计 (Categorical Features - Transposed)\n"
+            f"针对机构、险种、币别等定性字段的分布分析：\n\n{cat_stats_md}"
+        )
     except Exception as e:
-        return f"Error analyzing data: {str(e)}"
+        return f"数据分析过程中出错: {str(e)}"
 
 if __name__ == "__main__":
     mcp.run()
