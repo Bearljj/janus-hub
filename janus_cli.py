@@ -74,6 +74,9 @@ class AssistantGuidedProvider(BaseProvider):
             target = "add_knowledge"
             params = {"category": "UserPreference", "content": "Owner likes transposed views."}
             thought = "User wants to manually record a fact."
+        elif "version" in q or "版本" in q:
+            target = "check_version"
+            thought = "User wants to know the system version."
 
         else:
             # --- 触发 SOS 信号 (Trigger SOS Signal) ---

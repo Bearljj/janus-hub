@@ -128,6 +128,13 @@ class Dispatcher:
             self.memory.log_task(context)
             return context
 
+        if skill_id == "check_version":
+            result = "JANUS Hub Core v0.1-alfa (Codename: MVL)\n由 Antigravity 实时维护。"
+            context.messages.append(Message(role=MessageRole.ASSISTANT, content=result))
+            context.status = TaskStatus.COMPLETED
+            self.memory.log_task(context)
+            return context
+
         context.status = TaskStatus.RUNNING
         executor = self.skill_executors.get(skill_id)
         if not executor:
