@@ -4,6 +4,7 @@ from .schema import AgentSkill, Intent, TaskContext, Message, MessageRole, TaskS
 from .provider import BaseProvider
 from .executor import BaseExecutor
 from .audit import BaseAuditor, AuditStatus
+from .memory import MirrorMemory
 
 class Dispatcher:
     """
@@ -11,9 +12,10 @@ class Dispatcher:
     Responsible for Skill registration, Intent Resolution, and Task Routing.
     """
 
-    def __init__(self, provider: BaseProvider, auditor: BaseAuditor):
+    def __init__(self, provider: BaseProvider, auditor: BaseAuditor, memory: MirrorMemory = None):
         self.provider = provider
         self.auditor = auditor
+        self.memory = memory or MirrorMemory()
         self.skills: Dict[str, AgentSkill] = {}
         self.skill_executors: Dict[str, BaseExecutor] = {}
         self.active_tasks: Dict[str, TaskContext] = {}
@@ -60,6 +62,7 @@ class Dispatcher:
             if audit_report.status == AuditStatus.FAIL:
                 print(f"[审计中枢] ❌ 审计未通过: {audit_report.rationale}")
                 context.status = TaskStatus.REJECTED
+                self.memory.log_task(context) # 持久化记录
                 return context
             
             if audit_report.status == AuditStatus.WARN:
@@ -98,6 +101,7 @@ class Dispatcher:
             context.status = TaskStatus.FAILED
             context.messages.append(Message(role=MessageRole.SYSTEM, content=f"执行错误: {str(e)}"))
             
+        self.memory.log_task(context) # 持久化记录
         return context
 
     def get_skill_manifest(self) -> List[AgentSkill]:

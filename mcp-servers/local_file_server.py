@@ -87,5 +87,37 @@ async def search_in_file(relative_path: str, query: str) -> str:
     
     return "\n".join(results) if results else "No matches found."
 
+@mcp.tool()
+async def data_summary_stats(relative_path: str) -> str:
+    """
+    Generate summary statistics for a data file (columns types, null counts, basic stats).
+    生成数据文件的概要统计（列类型、空值统计、基础统计量）。
+    """
+    full_path = os.path.abspath(os.path.join(SECURE_ROOT, relative_path))
+    if not full_path.startswith(os.path.abspath(SECURE_ROOT)):
+        raise ValueError("Access Denied")
+
+    import pandas as pd
+    import io
+    
+    ext = os.path.splitext(relative_path)[1].lower()
+    try:
+        if ext == ".parquet":
+            df = pd.read_parquet(full_path)
+        else:
+            df = pd.read_csv(full_path)
+            
+        # 1. Basic Info (Types and Nulls)
+        buffer = io.StringIO()
+        df.info(buf=buffer)
+        info_str = buffer.getvalue()
+        
+        # 2. Descriptive Stats
+        stats_md = df.describe(include='all').to_markdown()
+        
+        return f"### 数据概要 (Info):\n{info_str}\n\n### 描述性统计 (Statistics):\n{stats_md}"
+    except Exception as e:
+        return f"Error analyzing data: {str(e)}"
+
 if __name__ == "__main__":
     mcp.run()

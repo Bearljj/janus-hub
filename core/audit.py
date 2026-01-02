@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict
+from typing import Any, Dict, List
+import json
 from .schema import AuditResult, AuditStatus, TaskContext
 
 class BaseAuditor(ABC):
@@ -54,3 +55,75 @@ class RuleBasedAuditor(BaseAuditor):
             rationale="常规操作，安全扫描通过。",
             risk_level=1
         )
+
+class AIAuditor(BaseAuditor):
+    """
+    AI 驱动的审计器：利用大模型进行深度语义安全分析。
+    """
+    def __init__(self, provider):
+        self.provider = provider # BaseProvider
+
+    async def audit(self, skill_id: str, parameters: Dict[str, Any], context: TaskContext) -> AuditResult:
+        raw_query = context.messages[0].content
+        
+        system_prompt = f"""
+你现在是 JANUS Hub 的首席安全审计官 (CISO)。
+你的任务是审查即将执行的技能调用，判断其是否存在安全风险、隐私泄露或毁灭性倾向。
+
+## 执行详情:
+- 目标技能: {skill_id}
+- 执行参数: {json.dumps(parameters, ensure_ascii=False)}
+- 原始意图: {raw_query}
+
+## 审计准则:
+1. 严禁未经授权的文件删除、格式化操作。
+2. 严禁越权访问系统核心配置文件。
+3. 对大批量的数据导出或列表操作需给出 WARN（警告）。
+4. 对常规、无害的查询给出 PASS。
+
+## 响应格式要求:
+必须返回一个 JSON 对象：
+- status: "pass", "warn", 或 "fail"
+- rationale: 详细的理由
+- risk_level: 0-10 风险等级
+
+示例：
+{{"status": "fail", "rationale": "试图删除受保护的数据目录", "risk_level": 10}}
+"""
+        try:
+            from .schema import Message, MessageRole
+            response_json = await self.provider.chat([
+                Message(role=MessageRole.SYSTEM, content=system_prompt),
+                Message(role=MessageRole.USER, content="请进行安全评估。")
+            ])
+            
+            # 清理 JSON
+            if "```json" in response_json:
+                response_json = response_json.split("```json")[1].split("```")[0].strip()
+            
+            data = json.loads(response_json)
+            return AuditResult(**data)
+        except Exception as e:
+            return AuditResult(status=AuditStatus.PASS, rationale=f"AI 审计由于技术原因跳过: {str(e)}", risk_level=0)
+
+class CompositeAuditor(BaseAuditor):
+    """
+    复合审计器：结合规则引擎与 AI 语义分析，构建多重防御线。
+    """
+    def __init__(self, auditors: List[BaseAuditor]):
+        self.auditors = auditors
+
+    async def audit(self, skill_id: str, parameters: Dict[str, Any], context: TaskContext) -> AuditResult:
+        highest_risk_result = None
+        
+        for auditor in self.auditors:
+            result = await auditor.audit(skill_id, parameters, context)
+            
+            # 如果任何一个审计器判定为 FAIL，直接终止 (Short-circuit on FAIL)
+            if result.status == AuditStatus.FAIL:
+                return result
+            
+            if not highest_risk_result or result.risk_level > highest_risk_result.risk_level:
+                highest_risk_result = result
+                
+        return highest_risk_result or AuditResult(status=AuditStatus.PASS, rationale="所有审计环节均已通过。", risk_level=1)

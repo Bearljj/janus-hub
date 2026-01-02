@@ -2,6 +2,9 @@ import asyncio
 import os
 import sys
 from typing import List
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -10,7 +13,8 @@ from core.schema import AgentSkill, Intent, Message, TaskStatus, AuditStatus
 from core.provider import BaseProvider
 from core.dispatcher import Dispatcher
 from core.executor import MCPExecutor
-from core.audit import RuleBasedAuditor
+from core.audit import RuleBasedAuditor, AIAuditor, CompositeAuditor
+from core.providers import OpenAIProvider
 
 class AssistantGuidedProvider(BaseProvider):
     """
@@ -51,6 +55,10 @@ class AssistantGuidedProvider(BaseProvider):
             target = "preview_data_schema"
             params = {"relative_path": "data/processed/insurance_data_cleaned.parquet"}
             thought = "User wants to see data structure."
+        elif "summary" in q or "stats" in q or "分析" in q:
+            target = "data_summary_stats"
+            params = {"relative_path": "data/processed/insurance_data_cleaned.parquet"}
+            thought = "User wants a statistical overview of the dataset."
 
         return Intent(
             raw_query=query,
@@ -64,8 +72,24 @@ async def start_janus():
     print("=== Project JANUS 调度中心 (v0.1-alfa) ===")
     
     # 1. Setup Kernel
-    provider = AssistantGuidedProvider()
-    auditor = RuleBasedAuditor()
+    api_key = os.getenv("OPENAI_API_KEY")
+    if api_key:
+        provider = OpenAIProvider(
+            model=os.getenv("JANUS_MODEL", "gpt-4-turbo-preview"),
+            api_key=api_key,
+            base_url=os.getenv("OPENAI_API_BASE")
+        )
+        mode_text = "智能大脑模式 (Connected to Cloud LLM)"
+        # 为智能模式启用复合审计 (Rule + AI)
+        auditor = CompositeAuditor([
+            RuleBasedAuditor(),
+            AIAuditor(provider=provider)
+        ])
+    else:
+        provider = AssistantGuidedProvider()
+        mode_text = "助手引导模式 (Mock Brain)"
+        auditor = RuleBasedAuditor()
+        
     dispatcher = Dispatcher(provider=provider, auditor=auditor)
 
     # 2. Setup Executors
@@ -77,11 +101,12 @@ async def start_janus():
         AgentSkill(id="list_files", name="List Files", description="List local files."),
         AgentSkill(id="search_in_file", name="Search Content", description="Search text in a file."),
         AgentSkill(id="preview_data_schema", name="Preview Data", description="Preview CSV/Parquet schema."),
+        AgentSkill(id="data_summary_stats", name="Data Stats", description="Get statistical summary of a data file."),
     ]
     for s in skills:
         dispatcher.register_skill(s, mcp_executor)
 
-    print("\nJANUS 已就绪。(系统当前运行在：助手引导模式)")
+    print(f"\nJANUS 已就绪。(系统当前运行在：{mode_text})")
     
     # 4. Simple REPL
     while True:
