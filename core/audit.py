@@ -34,10 +34,18 @@ class RuleBasedAuditor(BaseAuditor):
             )
 
         # 2. 敏感操作警告 (Soft Warning - Needs Human Confirmation)
-        if "files" in raw_query and ("all" in raw_query or "*" in params_str):
+        # 捕获 "all file" 或 "all files" 以及带通配符的操作
+        if "all" in raw_query and ("file" in raw_query or "data" in raw_query):
             return AuditResult(
                 status=AuditStatus.WARN,
-                rationale="你正试图进行批量操作（如列出所有文件），这在高负载或特定隐私环境下可能存在风险。",
+                rationale="你正试图进行批量数据/文件操作（检测到关键字 'all' 与 'file/data' 组合），这可能存在隐私或资源评估风险。",
+                risk_level=5
+            )
+            
+        if "*" in params_str:
+            return AuditResult(
+                status=AuditStatus.WARN,
+                rationale="检测到通配符 '*' 批量操作参数，需要您的二次确认。",
                 risk_level=5
             )
             
