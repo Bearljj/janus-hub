@@ -40,6 +40,8 @@
 - **中英双语混合 (Bilingual Hybrid)**：
   - 使用 **中文** 进行叙述、意图说明和用户偏好描述（高感性度、高语境容量）。
   - 在核心技术术语、协议、状态名后必须保留 **英文锚点**（例如：审计中间件 `AuditMiddleware`）。
+- **系统交互中文优先 (Chinese-First UI)**：
+  - 所有面向用户的系统提示 (System Prompts)、控制台日志 (Console Logs) 以及 UI 文本必须首选 **中文**，以确保与主人的直观对齐。
 - **抗熵增结构 (Anti-Entropy Structure)**：
   - 禁止单纯在文档末尾追加内容。新信息必须**集成 (Integrate)** 进既有的逻辑章节中。
   - 术语使用必须参考 `.agent/blueprint.md` 中的 **Terminology Mapping**。

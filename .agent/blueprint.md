@@ -15,10 +15,15 @@ Project JANUS 是一个模块化的 AI 系统框架，优先考虑数据隐私�
 - **标准**：遵循 ADK 启发的 `AgentCard` 架构（包含 ID、名称、描述、示例、元数据）。
 - **存储**：`skills/active/`。
 
-### C. 资源层 (MCP & Execution)
+### C. 资源层 (Resources - MCP & Native)
 - **角色**：对物理工具和数据的访问。
-- **协议**：模型上下文协议 (MCP)。
+- **协议**：目前主推模型上下文协议 (MCP)，但逻辑上保持传输不可知 (Transport Agnostic)。
 - **安全**：针对未验证代码在沙箱环境中执行。
+
+### D. 执行层 (Execution Layer - The Adapters)
+- **设计模式**：采用适配器模式 (Adapter Pattern)。
+- **逻辑**：编排层只下达“执行某项技能”的指令，具体的调用方式（是通过 MCP、本地 Python 模块还是外部 API）由执行适配器决定。
+- **意义**：确保未来可以随时“剥离”或“替换”底层连接协议。
 
 ## 3. 核心协议 (Key Protocols)
 ### 审计协议 (Audit Protocol - 宁慢必审)
