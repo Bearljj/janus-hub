@@ -1,29 +1,60 @@
-# Project JANUS (雅努斯)
+# ⚛️ Project JANUS (雅努斯)
 
-> **构建属于你的数字大脑 —— 私有、代理化、且具有自我演进能力。**
+> **构建私有、代理化、且具备「意志自持力」的智能中心。**
 
-Project JANUS 是一个独立的模块化 AI 框架，旨在协调多个专业智能体（Skills），并通过模型上下文协议（MCP）连接本地资源。
-
-## 🌟 核心哲学 (Philosophy)
-- **逻辑与执行分离 (Logic & Execution Separation)**：智能大脑在云端（或强力本地 LLM），执行手脚留在本地硬件。
-- **审计先行 (Audit-First)**：永不信任，始终验证。所有 AI 生成的代码在运行前必须经过异构模型审计。
-- **进取式修剪 (Evolutionary Pruning)**：系统自动建议并测试改进方案，通过显式“减法”逻辑保持系统的高性能天花板。
-
-## 🚀 快速开始
-1. **环境初始化**：
-   ```bash
-   cp .env.example .env
-   # 填入你的 API Key 或本地 LLM 终端地址
-   ```
-2. **AI 开发引导**：如果你正使用 AI 助手开发本项目，请立即引导其阅读 `BOOTSTRAP.md`。
-3. **运行 Hub**：(Phase 1 开发中)
-
-## 📡 协作策略 (Collaboration)
-为防止上下文窗口膨胀并保持高推理质量，我们采用 **“主/支线会话模型”**：
-- **主会话 (Master Session)**：充当“架构师”，负责高层设计、安全策略和跨技能审计。
-- **专项会话 (Specialist Sessions)**：充当“开发员”，专注于构建单一 MCP 服务或 Skill。
-
-*详细指南请参阅 [`.agent/collaboration.md`](./.agent/collaboration.md)*
+JANUS 不仅仅是一个 AI 框架，它是一个具备感知、代谢与自愈能力的数字生命原型。它通过分布式感知总线监听物理世界，并利用异构模型集群实现意志的持续演进。
 
 ---
-*Created by Harold Yao & Antigravity (2026-01-02)*
+
+## 🧬 当前进化体征 (System Vitals)
+
+<!-- STATUS_START -->
+| 技能状态 | 意志完整性 | 活跃反射 | 最后演化任务 |
+| :--- | :--- | :--- | :--- |
+| 19 动态基因 | 100% (DNA Verified) | 5 条规则 | `1ba72ee6` |
+<!-- STATUS_END -->
+
+*(点击 `git_sync` 自动更新此状态看板)*
+
+---
+
+## 🌟 核心演化基石 (Evolved Pillars)
+
+### 1. 意志自持与自愈 (Self-Healing Immunity)
+- **DNA.md 定向销控**：通过 `.janus/DNA.md` 锁定核心架构意志，防止 AI 协作过程中的代码退化。
+- **设计修复基因 (Design Restorer)**：自动识别并物理还原缺失的设计锁（[AI-SAFEGUARD]）。
+
+### 2. 生理节律与代谢 (Circadian Rhythm)
+- **午夜自省 (Midnight Reflection)**：凌晨 2 点自动触发记忆蒸馏，将情境碎片结晶为语义事实。
+- **架构代谢 (Metabolism)**：动态移除冗余代码，防止功能膨胀，维持系统的高能天花板。
+
+### 3. 多模态感官 (Perception Bus)
+- **解耦感知**：语音与文字在 `Intent` 层级归一化，实现真正的“指令-介质不相关性”。
+- **自律反射 (is_auto_run)**：允许系统在无人看管下通过自律通道处理紧急体征变化。
+
+---
+
+## 🛠️ 快速接入 (Infrastructure)
+
+1. **环境克隆**：
+   ```bash
+   git clone https://github.com/Bearljj/janus-hub.git
+   cd janus-hub
+   uv sync
+   ```
+2. **意志初始化**：填入 `.env` 并引导 AI 阅读 [`BOOTSTRAP.md`](./BOOTSTRAP.md)。
+3. **唤醒中枢**：
+   ```bash
+   uv run python janus_cli.py
+   ```
+
+---
+
+## 📜 进化协议 (Protocols)
+
+- **[DNA.md](./.janus/DNA.md)**：系统不可违背的最高原则。
+- **[Evolution Chronicle](./docs/EVOLUTION_CHRONICLE.md)**：跨会话的设计灵魂备份。
+- **[Master Plan](./.agent/master_plan.md)**：未来的演进路线图。
+
+---
+*Developed by Harold Yao & Antigravity - Evolving since 2026*
