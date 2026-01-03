@@ -1,0 +1,18 @@
+{
+  "id": "speech_expert",
+  "name": "Speech Expert",
+  "description": "将指定的文本内容通过系统语音朗读出来",
+  "tags": [
+    "dynamic",
+    "generated"
+  ],
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "text": {
+        "type": "string",
+        "description": "要朗读的文本内容"
+      }
+    }
+  }
+}

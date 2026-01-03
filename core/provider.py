@@ -14,9 +14,10 @@ class BaseProvider(ABC):
         pass
 
     @abstractmethod
-    async def resolve_intent(self, query: str, skills: List[AgentSkill]) -> Intent:
+    async def resolve_intent(self, query: str, skills: List[AgentSkill], perception_snapshot: str = "") -> Intent:
         """
-        Specialized method for intent resolution and skill mapping
-        意图解析与技能映射的专项方法
+        Specialized method for intent resolution and skill mapping.
+        Includes real-time perception context.
         """
         pass
+

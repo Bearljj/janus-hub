@@ -1,0 +1,14 @@
+{
+    "id": "memory_synthesizer",
+    "name": "Memory Synthesizer",
+    "description": "Analyzes raw mirror logs and distills them into structured facts for the Knowledge Base.",
+    "tags": [
+        "system",
+        "memory",
+        "intelligence"
+    ],
+    "input_schema": {
+        "type": "object",
+        "properties": {}
+    }
+}

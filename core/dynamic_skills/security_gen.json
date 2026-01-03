@@ -1,0 +1,5 @@
+{
+  "id": "security_gen",
+  "name": "Security Generator",
+  "description": "Generates secure random keys and passwords."
+}

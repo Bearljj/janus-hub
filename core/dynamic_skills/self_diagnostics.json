@@ -1,0 +1,5 @@
+{
+    "id": "self_diagnostics",
+    "name": "Self Diagnostics",
+    "description": "Analyzes JANUS's current capabilities and proposes the next stage of evolution."
+}

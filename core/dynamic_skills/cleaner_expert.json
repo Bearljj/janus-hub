@@ -1,0 +1,5 @@
+{
+    "id": "cleaner_expert",
+    "name": "Cleaner Expert",
+    "description": "Scans for large files in specific directories and offers cleanup advice."
+}

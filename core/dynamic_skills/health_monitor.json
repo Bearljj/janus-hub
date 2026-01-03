@@ -1,0 +1,26 @@
+{
+    "id": "health_monitor",
+    "name": "Health Monitor",
+    "description": "全面的健康监控系统：检查基因完整性、记忆状态、系统资源和感知系统，生成健康评分和优化建议",
+    "tags": [
+        "system",
+        "diagnostics",
+        "monitoring",
+        "health"
+    ],
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "mode": {
+                "type": "string",
+                "description": "检查模式: quick(快速), full(全面), auto(自动优化)",
+                "default": "quick"
+            },
+            "output": {
+                "type": "string",
+                "description": "输出格式: report(文本报告), json(JSON格式)",
+                "default": "report"
+            }
+        }
+    }
+}

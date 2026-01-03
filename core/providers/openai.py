@@ -26,9 +26,9 @@ class OpenAIProvider(BaseProvider):
         )
         return response.choices[0].message.content
 
-    async def resolve_intent(self, query: str, skills: List[AgentSkill]) -> Intent:
+    async def resolve_intent(self, query: str, skills: List[AgentSkill], perception_snapshot: str = "") -> Intent:
         """
-        利用 LLM 进行意图识别和参数提取。
+        利用 LLM 进行意图识别和参数提取，并注入感知环境上下文。
         """
         skill_manifest = [s.dict() for s in skills]
         
@@ -36,8 +36,12 @@ class OpenAIProvider(BaseProvider):
 你现在是 JANUS Hub 的中枢调度员。
 你的任务是根据用户的输入，判断是否需要调用特定的技能库，并提取参数。
 
+## 当前环境感知快照 (Context):
+{perception_snapshot}
+
 ## 可用技能清单:
 {json.dumps(skill_manifest, ensure_ascii=False, indent=2)}
+
 
 ## 响应格式要求:
 你必须仅返回一个有效的 JSON 对象，包含以下字段：

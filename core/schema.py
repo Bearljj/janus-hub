@@ -87,3 +87,4 @@ class TaskContext(BaseModel):
     status: TaskStatus = TaskStatus.PENDING
     artifacts: List[str] = Field(default_factory=list, description="Paths to generated files/data")
     metadata: Dict[str, Any] = Field(default_factory=dict)
+    dispatcher: Any = None # 核心进化：允许动态技能回调调度器

@@ -1,0 +1,19 @@
+{
+    "id": "memory_archiver",
+    "name": "Memory Archiver",
+    "description": "Scans old session logs, extracts key facts, and archives them to free up the Mirror layer.",
+    "tags": [
+        "utility",
+        "maintenance",
+        "memory"
+    ],
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "threshold": {
+                "type": "integer",
+                "description": "Number of recent logs to keep (default: 5)"
+            }
+        }
+    }
+}

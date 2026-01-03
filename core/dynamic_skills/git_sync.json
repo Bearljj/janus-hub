@@ -1,0 +1,23 @@
+{
+    "id": "git_sync",
+    "name": "Git Sync (同步演化专家)",
+    "description": "自动总结今日演化成果并将代码同步至 GitHub。具备智能 Commit 摘要生成和安全前置审计功能。",
+    "tags": [
+        "git",
+        "sync",
+        "maintenance"
+    ],
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "message": {
+                "type": "string",
+                "description": "自定义提交信息，若为空则由 AI 自动生成"
+            },
+            "dry_run": {
+                "type": "boolean",
+                "default": false
+            }
+        }
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "id": "memory_distiller",
+    "name": "Memory Distiller",
+    "description": "记忆蒸馏专家：负责将 Episodic 记忆提炼为 Semantic 知识和用户 Preference。",
+    "author": "JANUS-Core",
+    "version": "1.0.0",
+    "parameters": {
+        "action": {
+            "type": "string",
+            "description": "动作: distill (提炼), analyze (分析报告)",
+            "default": "distill"
+        },
+        "lookback_count": {
+            "type": "number",
+            "description": "回顾最近的情境记忆条数",
+            "default": 100
+        }
+    }
+}

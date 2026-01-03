@@ -1,0 +1,13 @@
+{
+  "id": "git_stats",
+  "name": "Git Stats",
+  "description": "统计当前仓库的 commit 总数和未提交的文件",
+  "tags": [
+    "dynamic",
+    "generated"
+  ],
+  "input_schema": {
+    "type": "object",
+    "properties": {}
+  }
+}

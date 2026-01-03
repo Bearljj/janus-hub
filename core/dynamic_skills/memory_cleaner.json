@@ -1,0 +1,31 @@
+{
+  "id": "memory_cleaner",
+  "name": "Memory Cleaner",
+  "description": "分析镜像日志并清理超过3天的旧备份文件。",
+  "tags": [
+    "system",
+    "maintenance",
+    "memory",
+    "cleanup"
+  ],
+  "examples": [
+    "memory_cleaner",
+    "帮我清理一下旧日志"
+  ],
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "days": {
+        "type": "integer",
+        "description": "清理多少天之前的日志 (默认: 3)",
+        "default": 3
+      },
+      "dry_run": {
+        "type": "boolean",
+        "description": "是否只进行模拟分析而不实际删除",
+        "default": false
+      }
+    }
+  },
+  "output_schema": {}
+}

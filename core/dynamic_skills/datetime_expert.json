@@ -1,0 +1,26 @@
+{
+  "id": "datetime_expert",
+  "name": "Datetime Expert",
+  "description": "Calculates dates, times, and day of week.",
+  "tags": [
+    "utility",
+    "time",
+    "date",
+    "日期",
+    "时间"
+  ],
+  "examples": [
+    "What day is it today?",
+    "What was the date 3 days ago?"
+  ],
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "query": {
+        "type": "string",
+        "description": "The time-related question"
+      }
+    }
+  },
+  "output_schema": {}
+}

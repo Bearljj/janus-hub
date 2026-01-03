@@ -1,0 +1,23 @@
+{
+  "id": "weather_expert",
+  "name": "Weather Expert",
+  "description": "Provides weather information for specific dates.",
+  "tags": [
+    "utility",
+    "weather"
+  ],
+  "examples": [
+    "What's the weather today?",
+    "Will it rain tomorrow?"
+  ],
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "day": {
+        "type": "string",
+        "description": "The day to check (today, tomorrow, day_after_tomorrow)"
+      }
+    }
+  },
+  "output_schema": {}
+}

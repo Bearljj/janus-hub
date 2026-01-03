@@ -1,0 +1,20 @@
+{
+    "id": "reflex_expert",
+    "name": "Reflex Expert",
+    "description": "感知反射专家：分析历史行为并提出/注入新的自动化反射规则。",
+    "tags": [
+        "evolution",
+        "perception",
+        "automation"
+    ],
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "mode": {
+                "type": "string",
+                "description": "模式: analyze (分析建议), apply (执行建议)",
+                "default": "analyze"
+            }
+        }
+    }
+}

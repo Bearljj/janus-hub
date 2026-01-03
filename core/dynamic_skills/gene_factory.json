@@ -1,0 +1,31 @@
+{
+    "id": "gene_factory",
+    "name": "Gene Factory",
+    "description": "The meta-skill for creating and deploying new dynamic genes into JANUS.",
+    "tags": [
+        "system",
+        "evolution",
+        "meta"
+    ],
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "target_skill_id": {
+                "type": "string",
+                "description": "Unique ID for the new skill (e.g., git_expert)"
+            },
+            "description": {
+                "type": "string",
+                "description": "A brief description of what the skill should do."
+            },
+            "code_template": {
+                "type": "string",
+                "description": "Optional: Specific logic or hints for the code. If empty, a standard scaffold will be used."
+            }
+        },
+        "required": [
+            "target_skill_id",
+            "description"
+        ]
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "id": "design_restorer",
+    "name": "Design Restorer (设计修复专家)",
+    "description": "基于 .janus/DNA.md 自动修复代码中缺失的 [AI-SAFEGUARD] 意志锁。",
+    "tags": [
+        "security",
+        "maintenance",
+        "autofix"
+    ],
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "action": {
+                "type": "string",
+                "enum": [
+                    "auto_fix",
+                    "dry_run"
+                ]
+            }
+        }
+    }
+}
